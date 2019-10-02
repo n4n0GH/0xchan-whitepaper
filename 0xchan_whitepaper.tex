@@ -30,7 +30,7 @@
 
 \begin{figure}[H]
     \centering
-    \texttt{WORKING DRAFT v1.0.5}
+    \texttt{WORKING DRAFT v1.0.6}
 
 \end{figure}
 
@@ -123,7 +123,7 @@ Users will make use of the website's input forms similar to the one in figure \r
   \label{fig:input}
 \end{figure}
 
-Since storing data on the Ethereum blockchain is quite expensive in terms of gas cost, we push the comment data and optional images to IPFS and only write the storage hash to our smart contract ledger.
+Since storing data on the Ethereum blockchain is quite expensive in terms of gas cost, we push the comment data and optional images to IPFS and only write a modified storage hash to our smart contract ledger. Since IPFS returns a hash that starts with ``Qm'' in it's base configuration, we can strip the first two bytes of the returned hash and use cheaper storager for a ``byte32'' entity since the modified hash will be exactly 32 bytes long. We can safely assume that other node operators will not change the default hashing behavior and thus reconstruct the hash on the interface.
 
 \begin{figure}[H]
   \centering
@@ -133,6 +133,13 @@ Since storing data on the Ethereum blockchain is quite expensive in terms of gas
 \end{figure}
 
 All text based key values will be transformed into a single JSON object, images will be added as they are to the IPFS node. The frontend will initiate the process, wait until the files have been added and pinned and return their IPFS hashes accordingly so the transaction can be properly written to the blockchain.
+
+\subsubsection{Temporary content}
+To increase user experience \projectname{} is going to make use of the user's browser localstorage, which allows safe and temporary storing of data similar to how cookies work. When a user creates a new post or thread, the data will not only be sent to IPFS but also stored in the localstorage and \projectname{} will use that to display the content that was sent to IPFS to the user.
+
+Since localstorage is a local unit, other users will not see the content. This will be made clear in a little notification attached to the message. Once the user submitted transaction on the Ethereum network has been processed, other users will also be able to see the content and interact with it. 
+
+The user's localstorage for temporary content will be purged regularly either automatically or it can be purged manually by the user.
 
 \subsubsection{Interacting with posts}
 Each post can be interacted with in many ways, replying to them is just one of those possibilities.
@@ -215,6 +222,7 @@ Users who participated in the crowdfunding campaign will be able to trade their 
 \pagebreak
 \section*{Changelog}
 \begin{itemize}
+\item Oct. 02, 2019 (v1.0.6): Changelog permanently moved to Git, added section 4.2.1 
 \item Oct. 01, 2019 (v1.0.5): Added sections 4.2.2 and 4.4.1
 \item Sep. 29, 2019 (v1.0.4): Changed draft section 5.1 from banners to wordfilters
 \item Sep. 11, 2019 (v1.0.3): Removed mention of Team JUST from first page
